@@ -17,4 +17,4 @@ no_index:
     - t
 requires: 
   Moose: 0
-version: 0.0001
+version: 0.00100
