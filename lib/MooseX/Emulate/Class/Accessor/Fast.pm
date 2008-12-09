@@ -2,7 +2,7 @@ package MooseX::Emulate::Class::Accessor::Fast;
 
 use Moose::Role;
 
-our $VERSION = '0.00400';
+our $VERSION = '0.00500';
 
 =head1 NAME
 
@@ -225,6 +225,36 @@ sub get{
 
   return @values;
 }
+
+sub make_accessor {
+  my($class, $field) = @_;
+  my $meta = $class->meta;
+  my $attr = $meta->find_attribute_by_name($field) || $meta->add_attribute($field); 
+  my $reader = $attr->get_read_method_ref;
+  my $writer = $attr->get_write_method_ref;
+  return sub {
+    my $self = shift;
+    return $reader->($self) unless @_;
+    return $writer->($self,(@_ > 1 ? [@_] : @_));
+  }
+}
+
+
+sub make_ro_accessor {
+  my($class, $field) = @_;
+  my $meta = $class->meta;
+  my $attr = $meta->find_attribute_by_name($field) || $meta->add_attribute($field); 
+  return $attr->get_read_method_ref;
+}
+
+
+sub make_wo_accessor {
+  my($class, $field) = @_;
+  my $meta = $class->meta;
+  my $attr = $meta->find_attribute_by_name($field) || $meta->add_attribute($field); 
+  return $attr->get_write_method_ref;
+}
+
 
 1;
 
