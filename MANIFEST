@@ -20,3 +20,4 @@ t/construction.t
 t/getset.t
 t/lib/TestAdoptCAF.pm
 t/no_replace_existing_symbols.t
+t/recreated_accessors.t
