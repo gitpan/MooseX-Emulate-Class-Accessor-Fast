@@ -1,5 +1,5 @@
 ---
-abstract: 'Emnulate Class::Accessor::Fast using attributes'
+abstract: 'Emulate Class::Accessor::Fast using attributes'
 author:
   - 'Guillermo Roditi (groditi) <groditi@cpan.org>'
 build_requires:
@@ -17,6 +17,7 @@ no_index:
     - t
 requires:
   Moose: 0.31
+  namespace::clean: 0
 resources:
   license: http://dev.perl.org/licenses/
-version: 0.00700
+version: 0.00701
