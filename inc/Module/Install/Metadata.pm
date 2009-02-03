@@ -6,7 +6,7 @@ use Module::Install::Base;
 
 use vars qw{$VERSION $ISCORE @ISA};
 BEGIN {
-	$VERSION = '0.76';
+	$VERSION = '0.78';
 	$ISCORE  = 1;
 	@ISA     = qw{Module::Install::Base};
 }
@@ -175,6 +175,13 @@ sub perl_version {
 	my $version = shift or die(
 		"Did not provide a value to perl_version()"
 	);
+
+	# Convert triple-part versions (eg, 5.6.1 or 5.8.9) to
+	# numbers (eg, 5.006001 or 5.008009).
+	# Also, convert double-part versions (eg, 5.8)
+
+	$version =~ s/^(\d+)\.(\d+)(?:\.(\d+))?$/sprintf("%d.%03d%03d",$1,$2,$3 || 0)/e;
+
 	$version =~ s/_.+$//;
 	$version = $version + 0; # Numify
 	unless ( $version >= 5.005 ) {
@@ -212,6 +219,9 @@ sub all_from {
 		unless ( -e $file ) {
 			die("all_from cannot find $file from $name");
 		}
+	}
+	unless ( -f $file ) {
+		die("The path '$file' does not exist, or is not a file");
 	}
 
 	# Some methods pull from POD instead of code.
@@ -424,8 +434,12 @@ sub license_from {
 		my $license_text = $1;
 		my @phrases      = (
 			'under the same (?:terms|license) as perl itself' => 'perl',        1,
+			'GNU general public license'                      => 'gpl',         1,
 			'GNU public license'                              => 'gpl',         1,
+			'GNU lesser general public license'               => 'lgpl',        1,
 			'GNU lesser public license'                       => 'lgpl',        1,
+			'GNU library general public license'              => 'lgpl',        1,
+			'GNU library public license'                      => 'lgpl',        1,
 			'BSD license'                                     => 'bsd',         1,
 			'Artistic license'                                => 'artistic',    1,
 			'GPL'                                             => 'gpl',         1,
@@ -438,9 +452,6 @@ sub license_from {
 		while ( my ($pattern, $license, $osi) = splice(@phrases, 0, 3) ) {
 			$pattern =~ s{\s+}{\\s+}g;
 			if ( $license_text =~ /\b$pattern\b/i ) {
-				if ( $osi and $license_text =~ /All rights reserved/i ) {
-					print "WARNING: 'All rights reserved' in copyright may invalidate Open Source license.\n";
-				}
 				$self->license($license);
 				return 1;
 			}
@@ -467,21 +478,6 @@ sub bugtracker_from {
 	# Set the bugtracker
 	bugtracker( $links[0] );
 	return 1;
-}
-
-sub install_script {
-	my $self = shift;
-	my $args = $self->makemaker_args;
-	my $exe  = $args->{EXE_FILES} ||= [];
-        foreach ( @_ ) {
-		if ( -f $_ ) {
-			push @$exe, $_;
-		} elsif ( -d 'script' and -f "script/$_" ) {
-			push @$exe, "script/$_";
-		} else {
-			die("Cannot find script '$_'");
-		}
-	}
 }
 
 1;
