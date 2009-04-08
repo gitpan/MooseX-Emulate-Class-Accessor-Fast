@@ -6,12 +6,11 @@ use Scalar::Util ();
 
 use MooseX::Emulate::Class::Accessor::Fast::Meta::Accessor ();
 
-our $VERSION = '0.00800';
+our $VERSION = '0.00801';
 
 =head1 NAME
 
-MooseX::Emulate::Class::Accessor::Fast -
-  Emulate Class::Accessor::Fast behavior using Moose attributes
+MooseX::Emulate::Class::Accessor::Fast - Emulate Class::Accessor::Fast behavior using Moose attributes
 
 =head1 SYNOPSYS
 
@@ -101,7 +100,7 @@ will be passed. Please see L<Class::MOP::Attribute> for more information.
 
 =cut
 
-sub mk_accessors{
+sub mk_accessors {
   my $self = shift;
   my $meta = $locate_metaclass->($self);
   my $class = $meta->name;
@@ -124,8 +123,7 @@ sub mk_accessors{
       if($attr_name eq $reader){
         my $alias = "_${attr_name}_accessor";
         next if $meta->has_method($alias);
-        my @alias_method = $attr->process_accessors(accessor => $alias, 0);
-        $meta->add_method(@alias_method);
+        $meta->add_method($alias => $attr->get_read_method_ref);
       }
     } else {
       my @opts = ( $meta->has_method($writer) ? () : (writer => $writer) );
@@ -143,7 +141,7 @@ Create read-only accessors.
 
 =cut
 
-sub mk_ro_accessors{
+sub mk_ro_accessors {
   my $self = shift;
   my $meta = $locate_metaclass->($self);
   my $class = $meta->name;
@@ -172,7 +170,7 @@ Create write-only accessors.
 =cut
 
 #this is retarded.. but we need it for compatibility or whatever.
-sub mk_wo_accessors{
+sub mk_wo_accessors {
   my $self = shift;
   my $meta = $locate_metaclass->($self);
   my $class = $meta->name;
@@ -201,7 +199,7 @@ See original L<Class::Accessor> documentation for more information.
 
 =cut
 
-sub follow_best_practice{
+sub follow_best_practice {
   my $self = shift;
   my $meta = $locate_metaclass->($self);
 
@@ -219,8 +217,8 @@ See original L<Class::Accessor> documentation for more information.
 
 =cut
 
-sub mutator_name_for{  return $_[1] }
-sub accessor_name_for{ return $_[1] }
+sub mutator_name_for  { return $_[1] }
+sub accessor_name_for { return $_[1] }
 
 =head2 set
 
@@ -228,7 +226,7 @@ See original L<Class::Accessor> documentation for more information.
 
 =cut
 
-sub set{
+sub set {
   my $self = shift;
   my $k = shift;
   confess "Wrong number of arguments received" unless scalar @_;
@@ -246,7 +244,7 @@ See original L<Class::Accessor> documentation for more information.
 
 =cut
 
-sub get{
+sub get {
   my $self = shift;
   confess "Wrong number of arguments received" unless scalar @_;
   my $meta = $locate_metaclass->($self);
