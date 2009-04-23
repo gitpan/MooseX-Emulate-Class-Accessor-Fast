@@ -10,6 +10,7 @@ all_from 'lib/MooseX/Emulate/Class/Accessor/Fast.pm';
 # Specific dependencies
 requires 'Moose' => '0.74';
 requires 'namespace::clean' => 0;
-build_requires 'Test::More' => 0;
+test_requires 'Test::More' => 0;
+test_requires 'Test::Exception' => 0;
 
 WriteAll;

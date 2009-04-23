@@ -1,3 +1,8 @@
+0.00802    Apr 23, 2008
+          - Declare test dependency on Test::Exception. Closes RT#43194. (rafl)
+          - Turn build_requires on Test::More into test_requires. (rafl)
+          - Fix doc typos in SYNOPSIS. Closes RT#40380. (rafl)
+
 0.00801    Apr 09, 2009
           - Make the accessor meta method class compatible with recent Moose.
           - Stop using deprecated Moose api to avoid warnings.
