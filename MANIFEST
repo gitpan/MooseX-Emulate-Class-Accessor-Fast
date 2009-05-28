@@ -18,6 +18,7 @@ README
 t/accessors.t
 t/adopt.t
 t/attr_named_meta.t
+t/BUILD_in_local_class.t
 t/class_accessor_chained_fast.t
 t/construction.t
 t/getset.t
