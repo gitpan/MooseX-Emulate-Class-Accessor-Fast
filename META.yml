@@ -20,8 +20,8 @@ no_index:
     - inc
     - t
 requires:
-  Moose: 0.74
+  Moose: 0.84
   namespace::clean: 0
 resources:
   license: http://dev.perl.org/licenses/
-version: 0.00901
+version: 0.00902
